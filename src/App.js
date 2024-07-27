@@ -1,24 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+
+/*import './App.css';
+import Login from './components/Login';
+import Profile from './components/Profile';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+<Login/>,
+<Profile/>
+
+  );
+}
+
+export default App;
+*/
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import Login from './components/Login';
+import Profile from './components/Profile';
+
+function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const handleLoginSuccess = () => {
+    setIsAuthenticated(true);
+  };
+
+  return (
+    <Router>
+      <Routes>
+        <Route
+          path="/login"
+          element={
+            isAuthenticated ? <Navigate to="/profile" /> : <Login onLoginSuccess={handleLoginSuccess} />
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            isAuthenticated ? <Profile /> : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="*"
+          element={<Navigate to="/login" />}
+        />
+      </Routes>
+    </Router>
   );
 }
 
